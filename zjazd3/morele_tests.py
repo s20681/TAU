@@ -110,14 +110,16 @@ def addToBasket():
     time.sleep(2.5)
     closeCookies()
 
+
 def basketButtonAvailable():
     return driver.find_elements(By.CLASS_NAME, "btn-notify-available")
+
 
 def testProductPriceAsExpected(product, lowerHigherEquals, expectedPrice):
     productPrice = search(product, lowerHigherEquals, expectedPrice)
     initialCartValue = getCartValue()
     assert productPrice == expectedPrice, "the product price wasnt as expected"
-    if(basketButtonAvailable()):
+    if (basketButtonAvailable()):
         addToBasket()
         closeWarranty()
         assert getCartValue() == initialCartValue + productPrice, "the cart summary value wasnt as expected after adding the product"
@@ -130,21 +132,15 @@ def closeWarranty():
     time.sleep(2.5)
 
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), desired_capabilities=capabilities)
+def init(title=None):
+    loads(title)
+    closeCookies()
 
-baseUrl = 'https://www.morele.net/'
-url = baseUrl
-driver.get(url)
 
 '''
 scenario 1 - init, close cookies window, search, make sure that search results are returned
  and products found are cohesive with what we expected
 '''
-
-
-def init(title=None):
-    loads(title)
-    closeCookies()
 
 
 def scenario1():
@@ -159,20 +155,25 @@ make sure that basket summary value is increased by the expected price
 '''
 
 
-# init
 def scenario2():
     driver.get(url)
     assert getCartValue() == 0, "the cart value is not 0"
     testProductPriceAsExpected('PH-GTX1060-6G', 'equals', 906.0)
     testProductPriceAsExpected('MUM54A00', 'equals', 849.0)
-    if(basketButtonAvailable()):
+    if (basketButtonAvailable()):
         addToBasket()
         closeWarranty()
         assert getCartValue() == 849.0, "the cart value is not as expected"
 
 
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), desired_capabilities=capabilities)
+
+baseUrl = 'https://www.morele.net/'
+url = baseUrl
+driver.get(url)
+
 init("Morele")
-# scenario1()
+scenario1()
 scenario2()
 
 # close down the driver object
