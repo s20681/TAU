@@ -79,6 +79,7 @@ def search(searchWord, higherLowerEquals='higher', expectedPrice=None, checkWord
             assert productPrice < expectedPrice, "the results did not fit your price expectation"
         if higherLowerEquals == 'equals':
             assert productPrice == expectedPrice, "the results did not fit your price expectation"
+    return productPrice
 
 
 def getCartValue():
@@ -109,11 +110,17 @@ def addToBasket():
     time.sleep(2.5)
     closeCookies()
 
+def basketButtonAvailable():
+    return driver.find_elements(By.CLASS_NAME, "btn-notify-available")
 
 def testProductPriceAsExpected(product, lowerHigherEquals, expectedPrice):
-    search(product, lowerHigherEquals, expectedPrice)
-    productPrice = getCartValue()
+    productPrice = search(product, lowerHigherEquals, expectedPrice)
+    initialCartValue = getCartValue()
     assert productPrice == expectedPrice, "the product price wasnt as expected"
+    if(basketButtonAvailable()):
+        addToBasket()
+        closeWarranty()
+        assert getCartValue() == initialCartValue + productPrice, "the cart summary value wasnt as expected after adding the product"
     time.sleep(2.5)
 
 
@@ -158,9 +165,10 @@ def scenario2():
     assert getCartValue() == 0, "the cart value is not 0"
     testProductPriceAsExpected('PH-GTX1060-6G', 'equals', 906.0)
     testProductPriceAsExpected('MUM54A00', 'equals', 849.0)
-    addToBasket()
-    closeWarranty()
-    assert getCartValue() == 849.0, "the cart value is not as expected"
+    if(basketButtonAvailable()):
+        addToBasket()
+        closeWarranty()
+        assert getCartValue() == 849.0, "the cart value is not as expected"
 
 
 init("Morele")
