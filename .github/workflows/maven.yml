@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: 
+      run: |
         cd ./zjazd4
         mvn -B package --file pom.xml
 
