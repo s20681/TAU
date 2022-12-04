@@ -11,7 +11,7 @@ name: TAU project [Java CI with Maven]
 defaults:
   run:
     shell: bash
-    working-directory: zjazd4
+    working-directory: ./zjazd4
 
 on:
   push:
