@@ -53,4 +53,8 @@ public class CoffeeMaker {
     public Recipe[] getRecipes() {
         return recipeBook.getRecipes();
     }
+
+    public void setRecipes(RecipeBook recipeBook) {
+        this.recipeBook = recipeBook;
+    }
 }
